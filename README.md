@@ -26,7 +26,7 @@ O projeto usa GitHub Actions para build e deploy automatizado. O workflow é aci
 
 ```bash
 # 1. Defina a versão
-export BASE_IMAGE_VERSION=4.5.10.34
+export BASE_IMAGE_VERSION=4.5.10.35
 
 # 2. Atualize a versão da image base
 cd ~/projetos/IFRN/ava/lms/moodle_docker
