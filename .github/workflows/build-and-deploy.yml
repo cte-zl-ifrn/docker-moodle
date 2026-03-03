@@ -98,8 +98,10 @@ jobs:
 
   # Build and push main image (ctezlifrn/avamoodle)
   build-main:
-    needs: detect-base-changes
-    if: 'true'
+    needs: build-base
+    if: |
+      always() &&
+      (needs.build-base.result == 'success' || needs.build-base.result == 'skipped')
     runs-on: ubuntu-latest
     permissions:
       contents: read

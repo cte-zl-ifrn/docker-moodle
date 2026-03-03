@@ -27,14 +27,14 @@ $CFG->dbuser    = env('CFG_DBUSER', env('POSTGRES_USER', 'ava_user'));
 $CFG->dbpass    = env('CFG_DBPASS', env('POSTGRES_PASSWORD', 'ava_pass'));
 $CFG->prefix    = env('CFG_PREFIX', 'mdl_');
 $CFG->dboptions = [
-  'dbpersist' => env_as_bool('CFG_DBPERSIST', false),
-  'dbsocket'  => env_as_bool('CFG_DBSOCKET', false),
-  'dbport'    => env_as_int('CFG_DBPORT', env_as_int('POSTGRES_PORT', 5432)),
+  'dbpersist'        => env_as_bool('CFG_DBPERSIST', false),
+  'dbsocket'         => env_as_bool('CFG_DBSOCKET', false),
+  'dbport'           => env_as_int('CFG_DBPORT', env_as_int('POSTGRES_PORT', 5432)),
   'dbhandlesoptions' => env_as_bool('CFG_DBHANDLESOPTIONS', false),
-  'dbcollation' => env('CFG_DBCOLLATION', 'utf8mb4_unicode_ci'),
-  'fetchbuffersize' => env_as_int('CFG_FETCHBUFFERSIZE', 100000),
-  'connecttimeout' => env_as_int('CFG_CONNECTTIMEOUT', null),
-  //'readonly' => ['instance'=>[['dbhost'=>'', 'dbport'=>'', 'dbuser'=>'', 'dbpass'=>'']]]
+  'dbcollation'      => env('CFG_DBCOLLATION', 'utf8mb4_unicode_ci'),
+  'fetchbuffersize'  => env_as_int('CFG_FETCHBUFFERSIZE', 100000),
+  'connecttimeout'   => env_as_int('CFG_CONNECTTIMEOUT', null),
+  //'readonly'         => ['instance'=>[['dbhost'=>'', 'dbport'=>'', 'dbuser'=>'', 'dbpass'=>'']]]
 ];
 
 //=========================================================================
