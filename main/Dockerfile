@@ -1,9 +1,9 @@
-ARG IMAGE_VERSION=4.5.10.028
+ARG MOODLE_IMAGE_VERSION=4.5.10.028
 
 ############################
 ## STAGE: build
 ####################################################################################
-FROM ctezlifrn/avamoodlebase:$IMAGE_VERSION AS build
+FROM ctezlifrn/avamoodlebase:$MOODLE_IMAGE_VERSION AS build
 
 ARG AVA_IMAGE_VERSION=ava_image_not_built
 ADD build/plugins /tmp/build/plugins
@@ -18,7 +18,7 @@ RUN sed -i s/MESSAGE_DEFAULT_LOGGEDIN\ \+\ MESSAGE_DEFAULT_LOGGEDOFF/MESSAGE_DEF
 ############################
 ## STAGE: final
 ###################################################################################
-FROM ctezlifrn/avamoodlebase:$IMAGE_VERSION
+FROM ctezlifrn/avamoodlebase:$MOODLE_IMAGE_VERSION
 
 COPY --from=build --chown=www-data:www-data /var/www/html /var/www/html
 

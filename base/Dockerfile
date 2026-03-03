@@ -9,8 +9,8 @@ ENV MOODLE_VERSION=4.5.10
 ADD build/php-extensions.sh             /tmp/build/php-extensions.sh
 ADD build/locale.gen                    /etc/locale.gen
 ADD build/moodle-install-package.sh     /usr/local/bin/
-ADD src/shell/                          /usr/local/bin/
-ADD src/ini/                            /usr/local/etc/php/conf.d/
+ADD runtime/shell/                      /usr/local/bin/
+ADD runtime/ini/                        /usr/local/etc/php/conf.d/
 
 USER root
 RUN    /tmp/build/php-extensions.sh \
@@ -21,7 +21,7 @@ RUN    /tmp/build/php-extensions.sh \
     && mkdir -p /var/log/apache2             && chown -R www-data:www-data /var/log/apache2 \
     && mkdir -p /var/log/cron                && chown -R www-data:www-data /var/log/cron
 
-ADD --chown=www-data:www-data src/php/ /var/www/html/
+ADD --chown=www-data:www-data runtime/php/ /var/www/html/
 
 USER www-data
 WORKDIR /var/www/html

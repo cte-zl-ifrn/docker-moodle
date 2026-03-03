@@ -1,0 +1,144 @@
+name: Build and Deploy
+
+on:
+  push:
+    tags:
+      - '*'
+
+env:
+  REGISTRY: ${{ vars.DOCKERHUB_HOST }}
+  BASE_IMAGE: ctezlifrn/avamoodlebase
+  MAIN_IMAGE: ctezlifrn/avamoodle
+
+jobs:
+  # Detecta mudanças na pasta /base
+  detect-base-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      base_changed: ${{ steps.changes.outputs.base }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check changes in /base directory
+        id: changes
+        run: |
+          # Get last tag
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          
+          if [ -z "$LAST_TAG" ]; then
+            # First tag ever - check if /base exists
+            if [ -d "base" ]; then
+              echo "base=true" >> $GITHUB_OUTPUT
+            else
+              echo "base=false" >> $GITHUB_OUTPUT
+            fi
+          else
+            # Check if /base has changes since last tag
+            if git diff $LAST_TAG HEAD -- base/ | grep -q .; then
+              echo "base=true" >> $GITHUB_OUTPUT
+            else
+              echo "base=false" >> $GITHUB_OUTPUT
+            fi
+          fi
+
+  # Build and push base image (ctezlifrn/avamoodlebase)
+  build-base:
+    needs: detect-base-changes
+    if: needs.detect-base-changes.outputs.base_changed == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push base image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./base
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.BASE_IMAGE }}:${{ github.ref_name }}
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.BASE_IMAGE }}:latest
+          cache-to: type=inline
+
+  # Build and push main image (ctezlifrn/avamoodle)
+  build-main:
+    needs: [detect-base-changes, build-base]
+    if: |
+      always() &&
+      (needs.detect-base-changes.outputs.base_changed == 'false' || needs.build-base.result == 'success')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push main image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./main
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.MAIN_IMAGE }}:${{ github.ref_name }}
+          build-args: |
+            AVA_IMAGE_VERSION=${{ github.ref_name }}
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.MAIN_IMAGE }}:latest
+          cache-to: type=inline
+
+  # Deploy
+  deploy:
+    needs: [detect-base-changes, build-base, build-main]
+    if: |
+      always() &&
+      (needs.detect-base-changes.outputs.base_changed == 'false' || needs.build-base.result == 'success') &&
+      needs.build-main.result == 'success'
+    runs-on: self-hosted
+
+    steps:
+      - name: Update Docker Compose and deploy
+        run: |
+          echo "Deploying service to ${{ secrets.SSH_HOST }}..."
+          
+          # Update image version in docker-compose.yml
+          ssh root@${{ secrets.SSH_HOST }} \
+            "sed -i 's/avamoodle:.*$/avamoodle:${{ github.ref_name }}/g' /var/dockers/docker-compose.yml"
+          
+          # Pull, stop and start the service
+          ssh root@${{ secrets.SSH_HOST }} \
+            "cd /var/dockers && docker compose pull ava && docker compose down ava && docker compose up -d"
+          
+          # Wait for service to stabilize
+          sleep 120
+          
+          # Show logs
+          ssh root@${{ secrets.SSH_HOST }} \
+            "cd /var/dockers && docker compose logs -n 1000"
+          
+          echo "Service successfully deployed to ${{ secrets.SSH_HOST }}."
