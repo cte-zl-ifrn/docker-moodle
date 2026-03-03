@@ -129,39 +129,7 @@ moodle_docker/
 
 ## Plugins que serão instalados
 
-### Tiny
-1. C4L ✅👍
-2. Code pro ✅👍
-3. Font color ✅👍 
-4. Font family ✅👍
-5. Font size ✅👍
-6. Chemical substance ✅👍
-7. QRCode ✅👍
-8. Word import ✅👍
-9. Preview ✅❓
-10. Word limit ✅👍
-11. Generico ✅👍
-12. Filter WS ✅❓
-13. Multi languange ✅👍
-14. Orphaned files ✅👍
-15. Snippet ✅❓
-16. Stash ✅👍
-17. Teams meeting ✅❓
-18. Widget hub ✅👍
-19. Corrections ✅🚫
-20. HTML block ✅🚫
-21. Translations 🚫🚫
-22. Cursive 🚫🚫💰
-23. Uploader 🚫❓
-25. Justify 🚫❓💰
-26. Computing 🚫❓💰
-27. Advanced Table 🚫🚫💰
-28. Enhaced table 🚫🚫💰
-29. Mentions 🚫🚫💰
-30. Link checker 🚫🚫💰
-31. Format painter 🚫🚫💰
-32. Case change 🚫🚫💰
-33. Advanced typography 🚫🚫💰
+Você pode conferir a lista de [plugins aqui](PLUGINS_DOCUMENTATION).
 
 ## Configuração Adicional do Moodle
 
@@ -226,4 +194,4 @@ ssh root@$SSH_HOST "cd /var/dockers && docker compose logs -f ava"
 - [License](LICENSE)
 - [Security](SECURITY)
 - [Change log](CHANGELOG)
-- [Contributing](COTRIBUTING)
+- [Contributing](CONTRIBUTING)
