@@ -78,10 +78,8 @@ jobs:
 
   # Build and push main image (ctezlifrn/avamoodle)
   build-main:
-    needs: [detect-base-changes, build-base]
-    if: |
-      always() &&
-      (needs.detect-base-changes.outputs.base_changed == 'false' || needs.build-base.result == 'success')
+    needs: detect-base-changes
+    if: 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -114,10 +112,10 @@ jobs:
 
   # Deploy
   deploy:
-    needs: [detect-base-changes, build-base, build-main]
+    needs: [build-base, build-main]
     if: |
       always() &&
-      (needs.detect-base-changes.outputs.base_changed == 'false' || needs.build-base.result == 'success') &&
+      (needs.build-base.result == 'success' || needs.build-base.result == 'skipped') &&
       needs.build-main.result == 'success'
     runs-on: self-hosted
 
