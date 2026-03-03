@@ -2,8 +2,14 @@
 
 Este é um monorepo que gerencia duas imagens Docker relacionadas:
 
-1. **`ctezlifrn/avamoodlebase`** - Imagem base do Moodle (pasta `/base`)
-2. **`ctezlifrn/avamoodle`** - Imagem principal do AVA (pasta `/main`)
+1. **`ctezlifrn/avamoodlebase`** - Imagem base do Moodle (pasta `/base`), esta tem basicamente o Moodle
+2. **`ctezlifrn/avamoodle`** - Imagem principal do AVA (pasta `/main`), esta estende da anterior e adiciona os plugins que estiverem na pasta `/main/build/plugins/`
+
+O sistema de versionamento segue o padrão `M.m.r.s`, onde:
+1. `M` = Major version do Moodle
+2. `m` = Minor version do Moodle
+3. `r` = Release version do Moodle
+4. `s` = Sequential version da CTE/DEAD/ZL/IFRN
 
 ## CI/CD com GitHub Actions
 
@@ -22,15 +28,14 @@ O projeto usa GitHub Actions para build e deploy automatizado. O workflow é aci
 # 1. Commit suas alterações
 git add .
 git commit -m "feat: nova funcionalidade"
+git push origin main
 
 # 2. Crie uma tag (formato: versão Moodle.build)
-git tag 4.5.10.029
+git tag 4.5.10.032
 
 # 3. Envie a tag para o GitHub (isso aciona o CI/CD)
-git push origin 4.5.10.029
+git push origin 4.5.10.032
 ```
-
-**Nota**: Se você modificou apenas a pasta `/base`, apenas a imagem base será reconstruída primeiro, seguida da imagem principal.
 
 ### Configuração dos Secrets
 
@@ -39,21 +44,21 @@ Configure os seguintes secrets no GitHub (Settings → Secrets and variables →
 #### Secrets (Organization level - já configurados)
 
 | Secret | Descrição |
-|--------|-----------||
+|--------|-----------|
 | `DOCKERHUB_USERNAME` | Usuário do Docker Hub |
 | `DOCKERHUB_TOKEN` | Token de acesso do Docker Hub |
 
 #### Variables (Organization level - já configuradas)
 
 | Variable | Descrição | Exemplo |
-|----------|-----------|---------||
+|----------|-----------|---------|
 | `DOCKERHUB_HOST` | Host do Docker Hub | `docker.io` |
 
 #### Secrets (Repository level - necessários)
 
 | Secret | Descrição | Exemplo |
-|--------|-----------|---------||
-| `SSH_HOST` | IP/hostname do servidor | `10.22.1.21` |
+|--------|-----------|---------|
+| `SSH_HOST` | IP/hostname do servidor | `10.4.5.10` |
 
 ## Desenvolvimento Local
 
@@ -65,17 +70,17 @@ docker login docker.io -u <username> -p <token>
 
 # Build da imagem base (se necessário)
 cd base
-docker build -t ctezlifrn/avamoodlebase:4.5.10.028 .
+docker build -t ctezlifrn/avamoodlebase:4.5.10.032 .
 cd ..
 
 # Build da imagem principal
 cd main
-docker build --build-arg AVA_IMAGE_VERSION=4.5.10.029 \
-  -t ctezlifrn/avamoodle:4.5.10.029 .
+docker build --build-arg AVA_IMAGE_VERSION=4.5.10.032 \
+  -t ctezlifrn/avamoodle:4.5.10.032 .
 
 # Push para o registry
-docker push ctezlifrn/avamoodlebase:4.5.10.028
-docker push ctezlifrn/avamoodle:4.5.10.029
+docker push ctezlifrn/avamoodlebase:4.5.10.032
+docker push ctezlifrn/avamoodle:4.5.10.032
 ```
 
 ### Ambiente de Desenvolvimento Local
@@ -191,8 +196,8 @@ Se precisar forçar o rebuild da imagem base sem mudanças em `/base`:
 
 ```bash
 # Faça uma mudança trivial em /base
-echo "# $(date)" >> base/README.md
-git add base/README.md
+echo "# $(date)" >> base/example.env
+git add base/example.env
 git commit -m "build: force base image rebuild"
 git tag 4.5.10.030
 git push origin 4.5.10.030
@@ -208,6 +213,10 @@ Você também pode verificar manualmente:
 ssh root@$SSH_HOST "cd /var/dockers && docker compose logs -f ava"
 ```
 
-## Licença
+## Documentação relevante
 
-Ver arquivo [LICENSE](LICENSE)
+- [Quick start](QUICKSTART)
+- [License](LICENSE)
+- [Security](SECURITY)
+- [Change log](CHANGELOG)
+- [Contributing](COTRIBUTING)
