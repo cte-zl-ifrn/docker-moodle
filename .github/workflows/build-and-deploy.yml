@@ -25,21 +25,41 @@ jobs:
       - name: Check changes in /base directory
         id: changes
         run: |
-          # Get last tag
-          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          CURRENT_TAG="${{ github.ref_name }}"
+          echo "Current tag: $CURRENT_TAG"
           
-          if [ -z "$LAST_TAG" ]; then
-            # First tag ever - check if /base exists
+          # Get all tags sorted by version (newest first)
+          ALL_TAGS=$(git tag --sort=-version:refname | head -10)
+          echo "Recent tags: $ALL_TAGS"
+          
+          # Find the previous tag
+          PREV_TAG=""
+          for tag in $ALL_TAGS; do
+            if [ "$tag" != "$CURRENT_TAG" ]; then
+              PREV_TAG=$tag
+              break
+            fi
+          done
+          
+          echo "Previous tag: $PREV_TAG"
+          
+          if [ -z "$PREV_TAG" ]; then
+            # No previous tag - check if /base exists
+            echo "No previous tag found"
             if [ -d "base" ]; then
+              echo "First release - base directory exists"
               echo "base=true" >> $GITHUB_OUTPUT
             else
               echo "base=false" >> $GITHUB_OUTPUT
             fi
           else
-            # Check if /base has changes since last tag
-            if git diff $LAST_TAG HEAD -- base/ | grep -q .; then
+            # Compare /base between tags
+            echo "Comparing base/ between $PREV_TAG and $CURRENT_TAG"
+            if git diff $PREV_TAG $CURRENT_TAG -- base/ | grep -q .; then
+              echo "Changes detected in base/"
               echo "base=true" >> $GITHUB_OUTPUT
             else
+              echo "No changes in base/"
               echo "base=false" >> $GITHUB_OUTPUT
             fi
           fi
