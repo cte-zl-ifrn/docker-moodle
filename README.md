@@ -34,7 +34,7 @@ sed -i "s/MOODLE_IMAGE_VERSION=.*$/MOODLE_IMAGE_VERSION=${BASE_IMAGE_VERSION}/g"
 
 # 3. Commit suas alterações
 git add .
-git commit -m "ci: [fix] As 5 ocorrências de secrets.SSH_HOST foram atualizadas para vars.SSH_HOST"
+git commit -m "build: [add] descreva o que foi corrigido"
 git push origin main
 
 # 4. Crie uma tag (formato: versão Moodle.build)
