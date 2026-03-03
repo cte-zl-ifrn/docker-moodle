@@ -32,17 +32,16 @@ export BASE_IMAGE_VERSION=4.5.10.33
 cd ~/projetos/IFRN/ava/lms/moodle_docker
 sed -i "s/MOODLE_IMAGE_VERSION=.*$/MOODLE_IMAGE_VERSION=${BASE_IMAGE_VERSION}/g" ./main/Dockerfile
 
-# 1. Commit suas alterações
+# 3. Commit suas alterações
 git add .
 git commit -m "feat: nova funcionalidade"
 git push origin main
 
+# 4. Crie uma tag (formato: versão Moodle.build)
+git tag $BASE_IMAGE_VERSION
 
-# 2. Crie uma tag (formato: versão Moodle.build)
-git tag 4.5.10.032
-
-# 3. Envie a tag para o GitHub (isso aciona o CI/CD)
-git push origin 4.5.10.032
+# 5. Envie a tag para o GitHub (isso aciona o CI/CD)
+git push origin $BASE_IMAGE_VERSION
 ```
 
 ### Configuração dos Secrets
@@ -51,22 +50,22 @@ Configure os seguintes secrets no GitHub (Settings → Secrets and variables →
 
 #### Secrets (Organization level - já configurados)
 
-| Secret | Descrição |
-|--------|-----------|
-| `DOCKERHUB_USERNAME` | Usuário do Docker Hub |
-| `DOCKERHUB_TOKEN` | Token de acesso do Docker Hub |
+| Secret               | Descrição                     |
+|----------------------|-------------------------------|
+| `DOCKERHUB_USERNAME` | Usuário do Docker Hub         |
+| `DOCKERHUB_TOKEN`    | Token de acesso do Docker Hub |
 
 #### Variables (Organization level - já configuradas)
 
-| Variable | Descrição | Exemplo |
-|----------|-----------|---------|
-| `DOCKERHUB_HOST` | Host do Docker Hub | `docker.io` |
+| Variable         | Descrição          | Exemplo      |
+|------------------|--------------------|--------------|
+| `DOCKERHUB_HOST` | Host do Docker Hub | `docker.io`  |
 
 #### Secrets (Repository level - necessários)
 
-| Secret | Descrição | Exemplo |
-|--------|-----------|---------|
-| `SSH_HOST` | IP/hostname do servidor | `10.4.5.10` |
+| Secret     | Descrição               | Exemplo       |
+|------------|-------------------------|---------------|
+| `SSH_HOST` | IP/hostname do servidor | `10.4.5.10`   |
 
 ## Desenvolvimento Local
 
