@@ -144,21 +144,21 @@ jobs:
     steps:
       - name: Update Docker Compose and deploy
         run: |
-          echo "Deploying service to ${{ secrets.SSH_HOST }}..."
+          echo "Deploying service to ${{ vars.SSH_HOST }}..."
           
           # Update image version in docker-compose.yml
-          ssh root@${{ secrets.SSH_HOST }} \
+          ssh root@${{ vars.SSH_HOST }} \
             "sed -i 's/avamoodle:.*$/avamoodle:${{ github.ref_name }}/g' /var/dockers/docker-compose.yml"
           
           # Pull, stop and start the service
-          ssh root@${{ secrets.SSH_HOST }} \
+          ssh root@${{ vars.SSH_HOST }} \
             "cd /var/dockers && docker compose pull ava && docker compose down ava && docker compose up -d"
           
           # Wait for service to stabilize
           sleep 120
           
           # Show logs
-          ssh root@${{ secrets.SSH_HOST }} \
+          ssh root@${{ vars.SSH_HOST }} \
             "cd /var/dockers && docker compose logs -n 1000"
           
-          echo "Service successfully deployed to ${{ secrets.SSH_HOST }}."
+          echo "Service successfully deployed to ${{ vars.SSH_HOST }}."

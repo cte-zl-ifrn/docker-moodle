@@ -26,7 +26,7 @@ O projeto usa GitHub Actions para build e deploy automatizado. O workflow é aci
 
 ```bash
 # 1. Defina a versão
-export BASE_IMAGE_VERSION=4.5.10.33
+export BASE_IMAGE_VERSION=4.5.10.34
 
 # 2. Atualize a versão da image base
 cd ~/projetos/IFRN/ava/lms/moodle_docker
@@ -34,7 +34,7 @@ sed -i "s/MOODLE_IMAGE_VERSION=.*$/MOODLE_IMAGE_VERSION=${BASE_IMAGE_VERSION}/g"
 
 # 3. Commit suas alterações
 git add .
-git commit -m "feat: nova funcionalidade"
+git commit -m "ci: [fix] As 5 ocorrências de secrets.SSH_HOST foram atualizadas para vars.SSH_HOST"
 git push origin main
 
 # 4. Crie uma tag (formato: versão Moodle.build)
