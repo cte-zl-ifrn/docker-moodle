@@ -25,10 +25,18 @@ O projeto usa GitHub Actions para build e deploy automatizado. O workflow é aci
 ### Como Fazer um Release
 
 ```bash
+# 1. Defina a versão
+export BASE_IMAGE_VERSION=4.5.10.33
+
+# 2. Atualize a versão da image base
+cd ~/projetos/IFRN/ava/lms/moodle_docker
+sed -i "s/MOODLE_IMAGE_VERSION=.*$/MOODLE_IMAGE_VERSION=${BASE_IMAGE_VERSION}/g" ./main/Dockerfile
+
 # 1. Commit suas alterações
 git add .
 git commit -m "feat: nova funcionalidade"
 git push origin main
+
 
 # 2. Crie uma tag (formato: versão Moodle.build)
 git tag 4.5.10.032

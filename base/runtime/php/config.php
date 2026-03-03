@@ -34,7 +34,7 @@ $CFG->dboptions = [
   'dbcollation'      => env('CFG_DBCOLLATION', 'utf8mb4_unicode_ci'),
   'fetchbuffersize'  => env_as_int('CFG_FETCHBUFFERSIZE', 100000),
   'connecttimeout'   => env_as_int('CFG_CONNECTTIMEOUT', null),
-  //'readonly'         => ['instance'=>[['dbhost'=>'', 'dbport'=>'', 'dbuser'=>'', 'dbpass'=>'']]]
+  //'readonly'         => ['instance'=>[['dbhost'=>'', 'dbport'=>'', 'dbuser'=>'', 'dbpass'=>'']] ]
 ];
 
 //=========================================================================
