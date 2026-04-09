@@ -140,6 +140,7 @@ jobs:
       (needs.build-base.result == 'success' || needs.build-base.result == 'skipped') &&
       needs.build-main.result == 'success'
     runs-on: self-hosted
+    permissions: {}
 
     steps:
       - name: Update Docker Compose and deploy
