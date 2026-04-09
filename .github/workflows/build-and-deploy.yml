@@ -14,6 +14,8 @@ jobs:
   # Detecta mudanças na pasta /base
   detect-base-changes:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       base_changed: ${{ steps.changes.outputs.base }}
     steps:
