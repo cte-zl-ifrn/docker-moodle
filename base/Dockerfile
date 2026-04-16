@@ -4,7 +4,7 @@
 FROM php:8.3.30-apache-trixie
 
 ENV DEBIAN_FRONTEND=noninteractive
-ENV MOODLE_VERSION=4.5.10
+ENV MOODLE_VERSION=4.5.11
 
 ADD build/php-extensions.sh             /tmp/build/php-extensions.sh
 ADD build/locale.gen                    /etc/locale.gen
