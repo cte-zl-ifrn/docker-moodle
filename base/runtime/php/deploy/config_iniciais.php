@@ -42,6 +42,7 @@ function inicial_set_defaults() {
 }
 
 function inicial_add_default_blocks() {
+    global $DB;
     try {
         # Example: site_info:content-pre;course_gallery:content-pre
         $blocks = env('INICIAL_ADD_DEFAULT_BLOCKS', '');
@@ -57,11 +58,19 @@ function inicial_add_default_blocks() {
         $page->set_url(new moodle_url('/'));
         $courserenderer = $page->get_renderer('core', 'course');
         foreach (explode(';', $blocks) as $parts) {
-            list($block, $region) = explode(':', $parts, 2);
-            $page->blocks->is_block_present($block);
-            if (!$page->blocks->is_block_present($block)) {
-            // if (!in_array($block, $installed_block_names)) {
-                $page->blocks->add_block($block, $region, 0, false, 'site-index');
+            try {
+                list($block, $region) = explode(':', $parts, 2);
+                if (!$page->blocks->is_block_present($block)) {
+                    echo "Vamos adicionar o block $block.\n";
+                    if ($DB->record_exists('block', ['name' => $block])) {
+                        $page->blocks->add_block($block, $region, 0, false, 'site-index');
+                    } else {
+                        echo "ERRO: Block $block não existe. Verifique se o nome do block está correto e se ele está instalado.\n";
+                    }
+                }
+            } catch (\Throwable $th) {
+                echo "ERRO: Configuração de bloco inválida: $parts. Detalhes: $th\n";
+                continue;
             }
         }
     } catch (\Throwable $th) {
