@@ -161,6 +161,29 @@ function inicial_oauth2() {
         );
     }
 }
+defined('MOODLE_INTERNAL') || die();
+
+require_once($CFG->dirroot . '/lib/accesslib.php');
+
+/**
+ * Clona papéis do Moodle para criar novos papéis personalizados, mantendo as mesmas permissões dos papéis originais.
+ * @return int ID do novo papel
+ */
+function clone_roles(): int {
+    global $DB;
+
+    $mappings = explode(',', env("INICIAL_CLONE_ROLES", 'editingteacher-formador=editingteacher,editingteacher-mediador=editingteacher,editingteacher-conteudista=editingteacher,editingteacher-tutor=editingteacher,editingteacher-coordenadorcurso=editingteacher,teacher-tutorpresencial=teacher,teacher-coordenadordepolo=teacher,teacher-secretariocurso=teacher'));
+    foreach ($mappings as $endpoint) {
+        list($newshortname, $sourceshortname) = explode('=', $endpoint, 2);
+        $source = $DB->get_record('role', ['shortname' => $sourceshortname], '*', MUST_EXIST);
+        $newroleid = create_role($newshortname, $newshortname, '', $source->archetype);
+        set_role_contextlevels($newroleid, explode(',', $source->contextlevels));
+
+        foreach ($DB->get_records('role_capabilities', ['roleid' => $sourceroleid]) as $cap) {
+            assign_capability($cap->capability, $cap->permission, $newroleid, $cap->contextid, true);
+        }
+    }
+}
 
 if (get_config('moodle', 'inicial_has_setted') != '1') {
     set_config('inicial_has_setted', '1');
