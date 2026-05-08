@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: moodle-env-config
+  labels:
+    app: moodle-web
+    release: {{ .Release.Name }}
+data:
+  CFG_ENV: "production"
+  CFG_DEBUG: "false"
+  CFG_WWWROOT: "https://moodle.ead.ifrn.edu.br"
+  CFG_WWWROOT_DOCKER: "https://moodle.ead.ifrn.edu.br"
+  CFG_DATAROOT: "/var/moodledata"
+  CFG_REVERSEPROXY: "false"
+  CFG_SSLPROXY: "true"
+  
+  # --- Configuração Postgres (Dados não sensíveis) ---
+  CFG_DBTYPE: "pgsql"
+  CFG_DBHOST: {{ .Values.postgres.host | quote }}
+  CFG_DBNAME: {{ .Values.postgres.name | quote }}
+  CFG_DBUSER: {{ .Values.postgres.user | quote }}
+  # Senha vai via Secret/EnvVar
+
+  # --- Configuração Redis/Valkey (Sessão) ---
+  {{- if .Values.redis.enabled }}
+  CFG_SESSION_HANDLER_CLASS: "\\core\\session\\redis"
+  CFG_SESSION_REDIS_HOST: {{ .Values.redis.host | quote }}
+  CFG_SESSION_REDIS_PORT: {{ .Values.redis.port | quote }}
+  CFG_SESSION_REDIS_DATABASE: {{ .Values.redis.database | quote }}
+  CFG_SESSION_REDIS_PREFIX: {{ .Values.redis.prefix | quote }}
+  CFG_SESSION_REDIS_ACQUIRE_LOCK_TIMEOUT: "120"
+  CFG_SESSION_REDIS_LOCK_EXPIRE: "7200"
+  {{- end }}

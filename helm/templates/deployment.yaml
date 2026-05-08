@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "moodle.fullname" . }}
+  labels:
+    {{- include "moodle.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "moodle.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "moodle.labels" . | nindent 8 }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+    spec:
+      serviceAccountName: {{ include "moodle.serviceAccountName" . }}
+      securityContext:
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+      
+      # initContainers:
+      #   - name: fix-permissions
+      #     image: busybox
+      #     # UID 33 é o padrão do www-data no Alpine/Debian/Ubuntu
+      #     command: ["sh", "-c", "chown -R 33:33 /var/moodledata && chmod -R 755 /var/moodledata"]
+      #     securityContext:
+      #       runAsUser: 0 # Precisa ser root aqui para ter poder de mudar o dono
+      #     volumeMounts:
+      #       - name: storage-volume
+      #         mountPath: {{ .Values.persistence.mountPath }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            runAsUser: {{ .Values.securityContext.runAsUser }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          
+          # Carrega variáveis gerais do ConfigMap
+          envFrom:
+            - configMapRef:
+                name: moodle-env-config
+
+          env:
+            # --- POSTGRES ENV VARS ---
+            - name: POSTGRES_HOST
+              value: {{ .Values.postgres.host | quote }}
+            - name: POSTGRES_DB
+              value: {{ .Values.postgres.name | quote }}
+            - name: POSTGRES_USER
+              value: {{ .Values.postgres.user | quote }}
+            - name: POSTGRES_PORT
+              value: {{ .Values.postgres.port | quote }}
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.postgres.vault.secretName }}
+                  key: {{ .Values.postgres.vault.secretKey }}
+            
+            # --- REDIS ENV VARS ---
+            {{- if .Values.redis.enabled }}
+            - name: CFG_SESSION_REDIS_AUTH
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.redis.vault.secretName }}
+                  key: {{ .Values.redis.vault.secretKey }}
+            {{- end }}
+
+          volumeMounts:
+            - name: storage-volume
+              mountPath: {{ .Values.persistence.mountPath }}
+
+      volumes:
+        - name: storage-volume
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.existingClaim | default (include "moodle.fullname" .) }}
+
+      nodeSelector:
+        {{- toYaml .Values.nodeSelector | nindent 8 }}
+      affinity:
+        {{- toYaml .Values.affinity | nindent 8 }}
+      tolerations:
+        {{- toYaml .Values.tolerations | nindent 8 }}
