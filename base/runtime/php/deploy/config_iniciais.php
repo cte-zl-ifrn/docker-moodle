@@ -4,14 +4,15 @@
 error_reporting(E_ALL | E_STRICT); // NOT FOR PRODUCTION SERVERS!
 ini_set('display_errors', 'stderr'); // NOT FOR PRODUCTION SERVERS!
 
-
+defined('MOODLE_INTERNAL') || die();
 define('CLI_SCRIPT', true);
-require_once('/var/www/html/config.php');
+
+require_once('../config.php');
 require_once($CFG->dirroot . '/lib/blocklib.php');
 require_once($CFG->dirroot . '/admin/tool/langimport/classes/controller.php');
-require_once($CFG->libdir.'/adminlib.php');
-require_once($CFG->libdir.'/tablelib.php');
-
+require_once($CFG->libdir . '/adminlib.php');
+require_once($CFG->libdir . '/tablelib.php');
+require_once($CFG->dirroot . '/lib/accesslib.php');
 
 
 function inicial_set_defaults() {
@@ -161,9 +162,6 @@ function inicial_oauth2() {
         );
     }
 }
-defined('MOODLE_INTERNAL') || die();
-
-require_once($CFG->dirroot . '/lib/accesslib.php');
 
 /**
  * Clona papéis do Moodle para criar novos papéis personalizados, mantendo as mesmas permissões dos papéis originais.
