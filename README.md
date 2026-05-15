@@ -77,17 +77,17 @@ docker login docker.io -u <username> -p <token>
 
 # Build da imagem base (se necessário)
 cd base
-docker build -t ctezlifrn/avamoodlebase:4.5.11.040 .
+docker build -t ctezlifrn/avamoodlebase:4.5.11.044 .
 cd ..
 
 # Build da imagem principal
 cd main
-docker build --build-arg AVA_IMAGE_VERSION=4.5.11.040 \
-  -t ctezlifrn/avamoodle:4.5.11.040 .
+docker build --build-arg AVA_IMAGE_VERSION=4.5.11.044 \
+  -t ctezlifrn/avamoodle:4.5.11.044 .
 
 # Push para o registry
-docker push ctezlifrn/avamoodlebase:4.5.11.040
-docker push ctezlifrn/avamoodle:4.5.11.040
+docker push ctezlifrn/avamoodlebase:4.5.11.044
+docker push ctezlifrn/avamoodle:4.5.11.044
 ```
 
 ### Ambiente de Desenvolvimento Local
