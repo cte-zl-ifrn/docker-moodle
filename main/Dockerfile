@@ -39,6 +39,14 @@ RUN apt-get update \
     && nvm use ${NODE_VERSION} \
     && npm install -g grunt-cli
 
+# Install PHPUnit globally (PHPUnit 11 for PHP 8.3 compatibility)
+RUN curl -L https://phar.phpunit.de/phpunit-11.phar -o /usr/local/bin/phpunit \
+    && chmod +x /usr/local/bin/phpunit
+
+# Configure PCOV for PHPUnit coverage
+RUN echo "pcov.enabled=1" >> /usr/local/etc/php/conf.d/20-pcov.ini \
+    && echo "pcov.directory=." >> /usr/local/etc/php/conf.d/20-pcov.ini
+
 USER www-data
 WORKDIR /var/www/html
 EXPOSE 80

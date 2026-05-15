@@ -822,12 +822,12 @@ if (env('CFG_ENV', 'local') == 'local' && env_as_bool('CFG_DEBUG', false)) {
 //=========================================================================
 // 9. PHPUNIT SUPPORT
 //=========================================================================
-// $CFG->phpunit_prefix = 'phpu_';
-// $CFG->phpunit_dataroot = '/home/example/phpu_moodledata';
-// $CFG->phpunit_directorypermissions = 02777; // optional
-// $CFG->phpunit_profilingenabled = true; // optional to profile PHPUnit runs.
-//
-//
+$CFG->phpunit_prefix = 'phpu_';
+$CFG->phpunit_dataroot = $CFG->dataroot . '/phpunit';
+$CFG->phpunit_directorypermissions = 02777;
+$CFG->phpunit_profilingenabled = true;
+
+
 //=========================================================================
 // 10. SECRET PASSWORD SALT
 //=========================================================================

@@ -48,8 +48,8 @@ docker-php-ext-configure ldap
 docker-php-ext-install -j$(nproc) ldap
 
 # APCu, igbinary, Redis, timezonedb, uuid, excimer, PCov, Solr, Memcached, xdebug 
-pecl install apcu igbinary timezonedb uuid excimer xdebug 
-docker-php-ext-enable apcu igbinary timezonedb uuid excimer xdebug
+pecl install apcu igbinary pcov timezonedb uuid excimer xdebug 
+docker-php-ext-enable apcu igbinary pcov timezonedb uuid excimer xdebug
 
 echo 'apc.enable_cli = On' >> /usr/local/etc/php/conf.d/10-docker-php-ext-apcu.ini
 

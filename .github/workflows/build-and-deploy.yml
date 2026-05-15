@@ -9,6 +9,7 @@ env:
   REGISTRY: ${{ vars.DOCKERHUB_HOST }}
   BASE_IMAGE: ctezlifrn/avamoodlebase
   MAIN_IMAGE: ctezlifrn/avamoodle
+  DEV_IMAGE: ctezlifrn/avamoodledev
 
 jobs:
   # Detecta mudanças na pasta /base
@@ -133,7 +134,19 @@ jobs:
             AVA_IMAGE_VERSION=${{ github.ref_name }}
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.MAIN_IMAGE }}:latest
           cache-to: type=inline
-          
+
+      - name: Build and push dev image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./main
+          target: dev
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.MAIN_IMAGE }}-dev:${{ github.ref_name }}
+          build-args: |
+            AVA_IMAGE_VERSION=${{ github.ref_name }}
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.MAIN_IMAGE }}-dev:latest
+          cache-to: type=inline
+           
   deploy:
     needs: [build-base, build-main]
     if: always() && (needs.build-base.result == 'success' || needs.build-base.result == 'skipped') && needs.build-main.result == 'success'
