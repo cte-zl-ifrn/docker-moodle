@@ -82,12 +82,12 @@ cd ..
 
 # Build da imagem principal
 cd main
-docker build --build-arg AVA_IMAGE_VERSION=4.5.11.044 \
-  -t ctezlifrn/avamoodle:4.5.11.044 .
+docker build --build-arg AVA_IMAGE_VERSION=4.5.11.047 \
+  -t ctezlifrn/avamoodle:4.5.11.047 .
 
 # Push para o registry
 docker push ctezlifrn/avamoodlebase:4.5.11.044
-docker push ctezlifrn/avamoodle:4.5.11.044
+docker push ctezlifrn/avamoodle:4.5.11.047
 ```
 
 ### Ambiente de Desenvolvimento Local
