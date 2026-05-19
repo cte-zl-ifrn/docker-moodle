@@ -39,6 +39,18 @@ RUN apt-get update \
     && nvm use ${NODE_VERSION} \
     && npm install -g grunt-cli
 
+# Instala o Composer Globalmente
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+RUN export COMPOSER_ALLOW_SUPERUSER=1 \
+    && mkdir -p /opt/phpcs \
+    && cd /opt/phpcs \
+    && composer init --no-interaction \
+    && composer config allow-plugins.dealerdirect/phpcodesniffer-composer-installer true \
+    && composer require moodlehq/moodle-cs \
+    && ln -s /opt/phpcs/vendor/bin/phpcs /usr/local/bin/phpcs \
+    && ln -s /opt/phpcs/vendor/bin/phpcbf /usr/local/bin/phpcbf
+
 # Install PHPUnit globally (PHPUnit 11 for PHP 8.3 compatibility)
 RUN curl -L https://phar.phpunit.de/phpunit-11.phar -o /usr/local/bin/phpunit \
     && chmod +x /usr/local/bin/phpunit
