@@ -698,7 +698,7 @@ if (env('CFG_ENV', 'local') == 'local' && env_as_bool('CFG_DEBUG', false)) {
   } elseif (env_as_bool('CFG_DEBUG_WARNINGS', false) && !env_as_bool('CFG_DEBUG_DEPRECATED', false)) {
     $CFG->debug = (E_ALL ^ E_WARNING);
   } elseif (!env_as_bool('CFG_DEBUG_WARNINGS', false) && env_as_bool('CFG_DEBUG_DEPRECATED', false)) {
-    $CFG->debug = (E_ALL ^ E_WARNING ^ E_DEPRECATED);
+    $CFG->debug = (E_ALL ^ E_WARNING);
   } else {
     $CFG->debug = (E_ALL);
   }
