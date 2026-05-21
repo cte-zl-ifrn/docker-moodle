@@ -47,7 +47,7 @@ docker-php-ext-install -j$(nproc) gd
 docker-php-ext-configure ldap
 docker-php-ext-install -j$(nproc) ldap
 
-# APCu, igbinary, Redis, timezonedb, uuid, excimer, PCov, Solr, Memcached, xdebug 
+# APCu, igbinary, Redis, timezonedb, uuid, excimer, PCov, xdebug 
 pecl install apcu igbinary pcov timezonedb uuid excimer xdebug 
 docker-php-ext-enable apcu igbinary pcov timezonedb uuid excimer xdebug
 
