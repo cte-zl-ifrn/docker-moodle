@@ -165,9 +165,8 @@ function inicial_oauth2() {
 
 /**
  * Clona papéis do Moodle para criar novos papéis personalizados, mantendo as mesmas permissões dos papéis originais.
- * @return int ID do novo papel
  */
-function clone_roles(): int {
+function clone_roles(): void {
     global $DB;
 
     $mappings = explode(',', env("INICIAL_CLONE_ROLES", 'editingteacher-formador=editingteacher,editingteacher-mediador=editingteacher,editingteacher-conteudista=editingteacher,editingteacher-tutor=editingteacher,editingteacher-coordenadorcurso=editingteacher,teacher-tutorpresencial=teacher,teacher-coordenadordepolo=teacher,teacher-secretariocurso=teacher'));
