@@ -52,7 +52,10 @@ RUN export COMPOSER_ALLOW_SUPERUSER=1 \
     && ln -s /opt/phpcs/vendor/bin/phpcbf /usr/local/bin/phpcbf
 
 # Install PHPUnit globally (PHPUnit 11 for PHP 8.3 compatibility)
-RUN curl -L https://phar.phpunit.de/phpunit-11.phar -o /usr/local/bin/phpunit \
+# Set this to the official SHA256 for the exact phpunit-11.phar being downloaded.
+ARG PHPUNIT_11_PHAR_SHA256=<REPLACE_WITH_OFFICIAL_SHA256>
+RUN curl -fL https://phar.phpunit.de/phpunit-11.phar -o /usr/local/bin/phpunit \
+    && echo "${PHPUNIT_11_PHAR_SHA256}  /usr/local/bin/phpunit" | sha256sum -c - \
     && chmod +x /usr/local/bin/phpunit
 
 # Configure PCOV for PHPUnit coverage
