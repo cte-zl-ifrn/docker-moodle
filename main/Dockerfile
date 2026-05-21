@@ -6,6 +6,7 @@ ARG MOODLE_IMAGE_VERSION=4.5.11.044
 FROM ctezlifrn/avamoodlebase:$MOODLE_IMAGE_VERSION AS build
 
 ARG AVA_IMAGE_VERSION=ava_image_not_built
+ARG NVM_INSTALL_SHA256
 ADD build/plugins /tmp/build/plugins
 USER www-data
 WORKDIR /tmp/build/plugins
@@ -33,7 +34,10 @@ RUN apt-get update \
         bash curl ca-certificates git xz-utils \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir -p ${NVM_DIR} \
-    && curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash \
+    && curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh -o /tmp/nvm-install.sh \
+    && echo "${NVM_INSTALL_SHA256}  /tmp/nvm-install.sh" | sha256sum -c - \
+    && bash /tmp/nvm-install.sh \
+    && rm -f /tmp/nvm-install.sh \
     && . ${NVM_DIR}/nvm.sh \
     && nvm install ${NODE_VERSION} \
     && nvm use ${NODE_VERSION} \
