@@ -177,7 +177,7 @@ function clone_roles(): int {
         $newroleid = create_role($newshortname, $newshortname, '', $source->archetype);
         set_role_contextlevels($newroleid, explode(',', $source->contextlevels));
 
-        foreach ($DB->get_records('role_capabilities', ['roleid' => $sourceroleid]) as $cap) {
+        foreach ($DB->get_records('role_capabilities', ['roleid' => $source->id]) as $cap) {
             assign_capability($cap->capability, $cap->permission, $newroleid, $cap->contextid, true);
         }
     }
