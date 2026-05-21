@@ -147,6 +147,8 @@ jobs:
     needs: [build-base, build-main]
     if: always() && (needs.build-base.result == 'success' || needs.build-base.result == 'skipped') && needs.build-main.result == 'success'
     runs-on: [self-hosted, runner-dead]
+    permissions:
+      contents: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
