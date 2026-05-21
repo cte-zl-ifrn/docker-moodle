@@ -19,24 +19,25 @@ function inicial_set_defaults() {
     global $DB;
 
     $defaults = [
-        '|lang'=>'pt_br',
-        '|theme'=>'boost',
-        '|frontpage'=>'',
-        '|frontpageloggedin'=>'',
-        '|defaultpreference_maildisplay'=>'0',
-        '|defaultpreference_mailformat'=>'0',
-        '|defaultpreference_maildigest'=>'2',
-        '|defaultpreference_autosubscribe'=>'1',
-        '|defaultpreference_trackforums'=>'0',
-        '|defaultpreference_core_contentbank_visibility'=>'1',
-        '|noreplyaddress'=>'admin@local.host',
+        'core|lang'=>'pt_br',
+        'core|theme'=>'boost',
+        'core|frontpage'=>'',
+        'core|frontpageloggedin'=>'',
+        'core|defaultpreference_maildisplay'=>'0',
+        'core|defaultpreference_mailformat'=>'0',
+        'core|defaultpreference_maildigest'=>'2',
+        'core|defaultpreference_autosubscribe'=>'1',
+        'core|defaultpreference_trackforums'=>'0',
+        'core|defaultpreference_core_contentbank_visibility'=>'1',
+        'core|noreplyaddress'=>'admin@local.host',
         'moodlecourse|visible'=>'1',
     ];
     foreach ($defaults as $key => $default_value) {
         list($plugin, $config) = explode('|', $key, 2);
-        $plugin = empty($plugin) ? null : $plugin;
+        $pluginforconfig = ($plugin === 'core') ? null : $plugin;
         $venv = strtoupper("INICIAL_CONFIG_{$plugin}_{$config}");
-        set_config($config, env($venv, $default_value), $plugin);
+        $legacyvenv = ($plugin === 'core') ? strtoupper("INICIAL_CONFIG__{$config}") : $venv;
+        set_config($config, env($venv, env($legacyvenv, $default_value)), $pluginforconfig);
     }
 
     $DB->update_record('user', (object) ['lang' => env('INICIAL_CONFIG_LANG', 'pt_br'), 'id' => 2]);   
