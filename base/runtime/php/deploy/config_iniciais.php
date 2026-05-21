@@ -174,7 +174,8 @@ function clone_roles(): int {
     foreach ($mappings as $endpoint) {
         list($newshortname, $sourceshortname) = explode('=', $endpoint, 2);
         $source = $DB->get_record('role', ['shortname' => $sourceshortname], '*', MUST_EXIST);
-        $newroleid = create_role($newshortname, $newshortname, '', $source->archetype);
+        $roledescription = ''; // descrição do papel (vazia intencionalmente ao clonar)
+        $newroleid = create_role($newshortname, $newshortname, $roledescription, $source->archetype);
         set_role_contextlevels($newroleid, explode(',', $source->contextlevels));
 
         foreach ($DB->get_records('role_capabilities', ['roleid' => $source->id]) as $cap) {
