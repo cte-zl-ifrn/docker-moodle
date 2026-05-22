@@ -218,4 +218,4 @@ jobs:
         run: |
           DEPLOY_TAG="${{ github.ref_type == 'tag' && github.ref_name || github.sha }}"
           ssh root@10.22.1.21 "sed -i \"s/avamoodle:[0-9.]\+/avamoodle:$DEPLOY_TAG/g\" /var/dockers/docker-compose.yml"
-          ssh root@10.22.1.21 "cd /var/dockers ; docker compose up -d ava"
+          ssh root@10.22.1.21 "cd /var/dockers && docker compose pull && docker compose down ava &&  docker compose up -d ava"
