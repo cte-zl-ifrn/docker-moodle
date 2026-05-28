@@ -21,7 +21,7 @@ PACKAGES_LDAP="libldap2"
 # cron - Execução em background. Usado nas Tasks.
 # locales - Localização. Usado em Idiomas.
 # poppler-utils - PDF para PNG. Usado no Atividade.
-PACKAGES_EXTRA="aspell cron locales poppler-utils graphviz"
+PACKAGES_EXTRA="aspell cron locales poppler-utils graphviz postfix"
 
 # echo "deb http://deb.debian.org/debian trixie main contrib non-free" >> /etc/apt/sources.list
 # echo "deb http://deb.debian.org/debian trixie-updates main contrib non-free" >> /etc/apt/sources.list
