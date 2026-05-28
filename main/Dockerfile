@@ -1,4 +1,4 @@
-ARG MOODLE_IMAGE_VERSION=4.5.11.049
+ARG MOODLE_IMAGE_VERSION=4.5.11.050
 
 ############################
 ## STAGE: build
