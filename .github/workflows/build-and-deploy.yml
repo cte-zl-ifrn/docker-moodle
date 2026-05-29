@@ -127,10 +127,10 @@ jobs:
           context: ./main
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.MAIN_IMAGE }}:${{ github.ref_name }}
-        build-args: |
-          AVA_IMAGE_VERSION=${{ github.ref_name }}
-          NVM_INSTALL_SHA256=${{ vars.NVM_INSTALL_SHA256 }}
-          PHPUNIT_11_PHAR_SHA256=${{ vars.PHPUNIT_11_PHAR_SHA256 }}
+          build-args: |
+            AVA_IMAGE_VERSION=${{ github.ref_name }}
+            NVM_INSTALL_SHA256=${{ vars.NVM_INSTALL_SHA256 }}
+            PHPUNIT_11_PHAR_SHA256=${{ vars.PHPUNIT_11_PHAR_SHA256 }}
 
   build-test:
     needs: build-base
@@ -164,10 +164,10 @@ jobs:
           target: dev
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.DEV_IMAGE }}:${{ github.ref_name }}
-        build-args: |
-          AVA_IMAGE_VERSION=${{ github.ref_name }}
-          NVM_INSTALL_SHA256=${{ vars.NVM_INSTALL_SHA256 }}
-          PHPUNIT_11_PHAR_SHA256=${{ vars.PHPUNIT_11_PHAR_SHA256 }}
+          build-args: |
+            AVA_IMAGE_VERSION=${{ github.ref_name }}
+            NVM_INSTALL_SHA256=${{ vars.NVM_INSTALL_SHA256 }}
+            PHPUNIT_11_PHAR_SHA256=${{ vars.PHPUNIT_11_PHAR_SHA256 }}
 
   deploy-test:
     needs: [build-base, build-test]
