@@ -92,6 +92,9 @@ jobs:
           tags: ${{ env.REGISTRY }}/${{ env.BASE_IMAGE }}:${{ github.ref_name }}
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.BASE_IMAGE }}:latest
           cache-to: type=inline
+          build-args: |
+            NVM_INSTALL_SHA256=${{ vars.NVM_INSTALL_SHA256 }}
+            PHPUNIT_11_PHAR_SHA256=${{ vars.PHPUNIT_11_PHAR_SHA256 }}
 
   build-main:
     needs: build-base
@@ -124,8 +127,10 @@ jobs:
           context: ./main
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.MAIN_IMAGE }}:${{ github.ref_name }}
-          build-args: |
-            AVA_IMAGE_VERSION=${{ github.ref_name }}
+        build-args: |
+          AVA_IMAGE_VERSION=${{ github.ref_name }}
+          NVM_INSTALL_SHA256=${{ vars.NVM_INSTALL_SHA256 }}
+          PHPUNIT_11_PHAR_SHA256=${{ vars.PHPUNIT_11_PHAR_SHA256 }}
 
   build-test:
     needs: build-base
@@ -159,15 +164,17 @@ jobs:
           target: dev
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.DEV_IMAGE }}:${{ github.ref_name }}
-          build-args: |
-            AVA_IMAGE_VERSION=${{ github.ref_name }}
+        build-args: |
+          AVA_IMAGE_VERSION=${{ github.ref_name }}
+          NVM_INSTALL_SHA256=${{ vars.NVM_INSTALL_SHA256 }}
+          PHPUNIT_11_PHAR_SHA256=${{ vars.PHPUNIT_11_PHAR_SHA256 }}
 
   deploy-test:
     needs: [build-base, build-test]
     if: |
       always() &&
       (needs.build-base.result == 'success' || needs.build-base.result == 'skipped') &&
-      needs.build-dev.result == 'success' &&
+      needs.build-test.result == 'success' &&
       endsWith(github.ref_name, '-test')
     runs-on: [self-hosted, runner-dead]
     permissions:
