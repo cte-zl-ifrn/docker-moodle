@@ -186,18 +186,18 @@ jobs:
       - name: Setup known_hosts
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H 10.22.1.208 >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ vars.K8S_HOST }} >> ~/.ssh/known_hosts
 
       - name: Enviar Chart do Helm
         run: |
-          ssh root@10.22.1.208 "rm -rf /tmp/moodle-chart"
-          scp -r ./helm root@10.22.1.208:/tmp/moodle-chart
+          ssh root@${{ vars.K8S_HOST }} "rm -rf /tmp/moodle-chart"
+          scp -r ./helm root@${{ vars.K8S_HOST }}:/tmp/moodle-chart
 
       - name: Executar Upgrade no Helm
         run: |
           DEPLOY_TAG="${{ github.ref_type == 'tag' && github.ref_name || github.sha }}"
 
-          ssh root@10.22.1.208 "helm upgrade --install moodle /tmp/moodle-chart \
+          ssh root@${{ vars.K8S_HOST }} "helm upgrade --install moodle /tmp/moodle-chart \
             --namespace ava \
             --set image.tag=$DEPLOY_TAG \
             --set image.repository=${{ env.REGISTRY }}/${{ env.DEV_IMAGE }}"
@@ -218,10 +218,10 @@ jobs:
       - name: Setup known_hosts
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H 10.22.1.21 >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ vars.SSH_HOST }} >> ~/.ssh/known_hosts
 
       - name: Executar Upgrade no Helm
         run: |
           DEPLOY_TAG="${{ github.ref_type == 'tag' && github.ref_name || github.sha }}"
-          ssh root@10.22.1.21 "sed -i \"s/avamoodle:[0-9.]\+/avamoodle:$DEPLOY_TAG/g\" /var/dockers/docker-compose.yml"
-          ssh root@10.22.1.21 "cd /var/dockers && docker compose pull && docker compose down ava &&  docker compose up -d ava"
+          ssh root@${{ vars.SSH_HOST }} "sed -i \"s/avamoodle:[0-9.]\+/avamoodle:$DEPLOY_TAG/g\" /var/dockers/docker-compose.yml"
+          ssh root@${{ vars.SSH_HOST }} "cd /var/dockers && docker compose pull && docker compose down ava && docker compose up -d ava"
