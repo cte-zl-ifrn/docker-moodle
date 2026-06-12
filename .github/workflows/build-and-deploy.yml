@@ -197,7 +197,7 @@ jobs:
         run: |
           DEPLOY_TAG="${{ github.ref_type == 'tag' && github.ref_name || github.sha }}"
 
-          ssh root@${{ vars.K8S_HOST }} "helm upgrade --install moodle /tmp/moodle-chart \
+          ssh ${{ vars.K8S_HOST }} "helm upgrade --install moodle /tmp/moodle-chart \
             --namespace ava \
             --set image.tag=$DEPLOY_TAG \
             --set image.repository=${{ env.REGISTRY }}/${{ env.DEV_IMAGE }}"
