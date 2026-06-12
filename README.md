@@ -29,7 +29,7 @@ O projeto usa GitHub Actions para build e deploy automatizado. O workflow é aci
 export BASE_IMAGE_VERSION=4.5.10.35
 
 # 2. Atualize a versão da image base
-cd ~/projetos/IFRN/ava/lms/moodle_docker
+cd ~/projetos/IFRN/suap-ava-suite/docker_moodle
 sed -i "s/MOODLE_IMAGE_VERSION=.*$/MOODLE_IMAGE_VERSION=${BASE_IMAGE_VERSION}/g" ./main/Dockerfile
 
 # 3. Commit suas alterações
@@ -95,8 +95,8 @@ docker push ctezlifrn/avamoodle:4.5.11.048
 ```bash
 # Limpar volumes existentes (cuidado: apaga dados!)
 sudo rm -rf volumes
-mkdir -p volumes/ava/moodledata && touch volumes/ava/moodledata/.empty
-chmod -R 777 volumes/ava/moodledata
+mkdir -p volumes/moodle/data && touch volumes/moodle/data/.empty
+chmod -R 777 volumes/moodle/data
 
 # Iniciar contêineres
 docker compose up -d
@@ -137,7 +137,7 @@ Você pode conferir a lista de [plugins aqui](PLUGINS_DOCUMENTATION).
 
 **additionalhtmlhead**
 ```html
-<script src='http://ava/lib/javascript.php/1692023308/lib/jquery/jquery-3.6.1.min.js'></script>
+<script src='http://moodle/lib/javascript.php/1692023308/lib/jquery/jquery-3.6.1.min.js'></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js'></script>
 ```
 
