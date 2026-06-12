@@ -193,16 +193,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
-      - name: Setup known_hosts
-        run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ vars.K8S_HOST }} >> ~/.ssh/known_hosts
-
-      - name: Enviar Chart do Helm
-        run: |
-          ssh root@${{ vars.K8S_HOST }} "rm -rf /tmp/moodle-chart"
-          scp -r ./helm root@${{ vars.K8S_HOST }}:/tmp/moodle-chart
-
       - name: Executar Upgrade no Helm
         run: |
           DEPLOY_TAG="${{ github.ref_type == 'tag' && github.ref_name || github.sha }}"
@@ -225,13 +215,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
-      - name: Setup known_hosts
-        run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ vars.SSH_HOST }} >> ~/.ssh/known_hosts
-
-      - name: Executar Upgrade no Helm
+      - name: Executar Upgrade no Docker Compose
         run: |
           DEPLOY_TAG="${{ github.ref_type == 'tag' && github.ref_name || github.sha }}"
-          ssh root@${{ vars.SSH_HOST }} "sed -i \"s/avamoodle:[0-9.]\+/avamoodle:$DEPLOY_TAG/g\" /var/dockers/docker-compose.yml"
-          ssh root@${{ vars.SSH_HOST }} "cd /var/dockers && docker compose pull && docker compose down ava && docker compose up -d ava"
+          ssh ${{ vars.SSH_HOST }} "sed -i \"s/avamoodle:.*/avamoodle:$DEPLOY_TAG/g\" /var/dockers/docker-compose.yml"
+          ssh ${{ vars.SSH_HOST }} "cd /var/dockers && docker compose pull && docker compose down ava && docker compose up -d ava"
