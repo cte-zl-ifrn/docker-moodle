@@ -180,7 +180,7 @@ jobs:
             PHPUNIT_11_PHAR_SHA256=${{ vars.PHPUNIT_11_PHAR_SHA256 }}
 
   deploy-test:
-    needs: [build-base, build-test]
+    needs: [build-test]
     if: |
       always() &&
       (needs.build-base.result == 'success' || needs.build-base.result == 'skipped') &&
@@ -203,7 +203,7 @@ jobs:
             --set image.repository=${{ env.REGISTRY }}/${{ env.DEV_IMAGE }}"
 
   deploy-main:
-    needs: [build-base, build-main]
+    needs: [build-main]
     if: |
       always() && needs.build-main.result == 'success' &&
       startsWith(github.ref, 'refs/tags/') && !endsWith(github.ref_name, '-test')
