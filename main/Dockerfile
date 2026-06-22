@@ -7,9 +7,23 @@ FROM ctezlifrn/avamoodlebase:$MOODLE_IMAGE_VERSION AS build
 
 ARG AVA_IMAGE_VERSION=ava_image_not_built
 ARG NVM_INSTALL_SHA256
+
+USER root
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends curl jq ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
 ADD build/plugins /tmp/build/plugins
-USER www-data
 WORKDIR /tmp/build/plugins
+
+RUN URL_PAINELAVA=$(curl -s https://api.github.com/repos/suap-ava-suite/moodle-tool_painelava/releases | jq -r 'map(select(.tag_name | endswith("-test") | not)) | .[0].zipball_url') \
+    && curl -sL "$URL_PAINELAVA" -o tool_painelava.zip \
+    && URL_SUAP=$(curl -s https://api.github.com/repos/suap-ava-suite/moodle-local_suap/releases | jq -r 'map(select(.tag_name | endswith("-test") | not)) | .[0].zipball_url') \
+    && curl -sL "$URL_SUAP" -o local_suap.zip
+
+RUN chown -R www-data:www-data /tmp/build/plugins
+
+USER www-data
 RUN for plugin in *.zip ; do /usr/local/bin/moodle-install-package.sh $plugin; done
 RUN sed -i s/ava_image_not_built/$AVA_IMAGE_VERSION/g /var/www/html/readenv.php
 # Moodle timeline format customization: enable message defaults by replacing
