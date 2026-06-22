@@ -193,6 +193,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
+      - name: Enviar Chart do Helm
+        run: |
+          ssh ${{ vars.K8S_HOST }} "rm -rf /tmp/moodle-chart"
+          scp -r ./helm ${{ vars.K8S_HOST }}:/tmp/moodle-chart
+
       - name: Executar Upgrade no Helm
         run: |
           DEPLOY_TAG="${{ github.ref_type == 'tag' && github.ref_name || github.sha }}"
