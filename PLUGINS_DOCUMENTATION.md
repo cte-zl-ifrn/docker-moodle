@@ -95,7 +95,7 @@ Esta documentação lista todos os plugins que serão instalados no ambiente Moo
 | `block_completion_levels` | moodle50_2026012701 | Mostra níveis de conclusão |
 | `block_completion_progress` | moodle51_2025101300 | Progresso de conclusão de atividades |
 | `block_configurable_reports` | moodle45_2024051300 | Relatórios configuráveis |
-| `block_course_gallery` | 2026092815 | Galeria de cursos |
+| `block_course_gallery` | 2026092816 | Galeria de cursos |
 | `block_course_rating` | 202507031004 | Avaliação de cursos |
 | `block_custom_css` | 2025070302 | CSS customizado por bloco |
 | `block_dedication` | moodle44_2024072200 | Rastreamento de dedicação do aluno |
