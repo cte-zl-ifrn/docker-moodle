@@ -17,6 +17,9 @@ install_moodle_package() {
     fi
 
     local wwwroot=/var/www/html
+    if [ -d "/var/www/html/public" ]; then
+        wwwroot=/var/www/html/public
+    fi
 
     # Criar diretório temporário para descompactação
     local STAGE_DIR
