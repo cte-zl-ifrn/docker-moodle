@@ -10,6 +10,7 @@ define('CLI_SCRIPT', true);
 require_once('../config.php');
 require_once($CFG->dirroot . '/lib/blocklib.php');
 require_once($CFG->dirroot . '/admin/tool/langimport/classes/controller.php');
+require_once($CFG->libdir . '/componentlib.class.php');
 require_once($CFG->libdir . '/adminlib.php');
 require_once($CFG->libdir . '/tablelib.php');
 require_once($CFG->dirroot . '/lib/accesslib.php');
