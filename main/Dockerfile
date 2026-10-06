@@ -1,9 +1,9 @@
-ARG MOODLE_IMAGE_VERSION=4.5.13.074
+ARG MOODLE_IMAGE_VERSION=4.5.15.001
 
 ############################
 ## STAGE: build
 ####################################################################################
-FROM ctezlifrn/avamoodlebase:$MOODLE_IMAGE_VERSION AS build
+FROM kelsoncm/moodle:$MOODLE_IMAGE_VERSION AS build
 
 ARG AVA_IMAGE_VERSION=ava_image_not_built
 ARG NVM_INSTALL_SHA256
@@ -80,7 +80,7 @@ CMD ["apache2-foreground"]
 ############################
 ## STAGE: final
 ###################################################################################
-FROM ctezlifrn/avamoodlebase:$MOODLE_IMAGE_VERSION
+FROM kelsoncm/moodle:$MOODLE_IMAGE_VERSION
 
 COPY --from=build --chown=www-data:www-data /var/www/html /var/www/html
 
