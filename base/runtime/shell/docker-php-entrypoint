@@ -12,17 +12,14 @@ if [ "$1" == "" ] || [ "$@" == "apache2-foreground" ]; then
 
     php waitdb.php
 
-    echo -e "${RED}Install Moodle database, if necessary.${RESET}" \
-    && php admin/cli/install_database.php --agree-license --lang=en --adminuser=admin --adminpass=admin --adminemail=admin@server.local --fullname=Moodle --shortname=Moodle --summary=Moodle \
-    && echo -e "${GREEN}Install Moodle: OK${RESET}"
+    echo -e "${RED}Install Moodle database, if necessary.${RESET}"
+    php admin/cli/install_database.php --agree-license --lang=en --adminuser=admin --adminpass=admin --adminemail=admin@server.local --fullname=Moodle --shortname=Moodle --summary=Moodle || true
 
-    echo -e "${RED}Upgrade Moodle database, if necessary${RESET}" \
-    && php admin/cli/upgrade.php --non-interactive --allow-unstable \
-    && echo -e "${GREEN}Upgrade Moodle: OK"
+    echo -e "${RED}Upgrade Moodle database, if necessary${RESET}"
+    php admin/cli/upgrade.php --non-interactive --allow-unstable || true
 
-    echo -e "${RED}Configura os padrões do IFRN${RESET}" \
-    && php deploy/config_iniciais.php \
-    && echo -e "${GREEN}Padrões do IFRN: OK${RESET}"
+    echo -e "${RED}Configura os padrões do IFRN${RESET}"
+    php deploy/config_iniciais.php || true
 
     echo -e "${RED}Baixa os content types do H5P${RESET}"
     php admin/cli/scheduled_task.php -f --execute=\\core\\task\\h5p_get_content_types_task >> /var/log/moodle/cron.log &
