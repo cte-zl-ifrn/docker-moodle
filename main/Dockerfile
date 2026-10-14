@@ -12,7 +12,10 @@ USER root
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends curl jq ca-certificates unzip zip rsync \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && mkdir -p /var/moodledata \
+    && chown -R www-data:www-data /var/moodledata \
+    && chmod 775 /var/moodledata
 
 ADD moodle-install-package.sh /usr/local/bin/moodle-install-package.sh
 ADD build/plugins  /tmp/build/plugins
@@ -81,6 +84,11 @@ CMD ["apache2-foreground"]
 ## STAGE: final
 ###################################################################################
 FROM kelsoncm/moodle:$MOODLE_IMAGE_VERSION
+
+USER root
+RUN mkdir -p /var/moodledata \
+    && chown -R www-data:www-data /var/moodledata \
+    && chmod 775 /var/moodledata
 
 COPY --from=build --chown=www-data:www-data /var/www/html /var/www/html
 
