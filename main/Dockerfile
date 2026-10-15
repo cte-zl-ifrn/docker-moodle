@@ -5,7 +5,7 @@ ARG MOODLE_IMAGE_VERSION=5.3.0.004
 ####################################################################################
 FROM kelsoncm/moodle:$MOODLE_IMAGE_VERSION AS build
 
-ARG AVA_IMAGE_VERSION=ava_image_not_built
+ARG AVA_IMAGE_VERSION=$MOODLE_IMAGE_VERSION
 ARG NVM_INSTALL_SHA256
 ARG PHPUNIT_11_PHAR_SHA256
 
