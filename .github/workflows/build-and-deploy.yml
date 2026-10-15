@@ -24,7 +24,7 @@ jobs:
       is_test: ${{ steps.tag_check.outputs.is_test }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -59,6 +59,12 @@ jobs:
           CURRENT_TAG="${{ github.ref_name }}"
           echo "Current tag: $CURRENT_TAG"
 
+          if [ ! -d "base" ]; then
+            echo "Directory base does not exist in current commit"
+            echo "base=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
           ALL_TAGS=$(git tag --sort=-version:refname | head -10)
           echo "Recent tags: $ALL_TAGS"
 
@@ -74,12 +80,7 @@ jobs:
 
           if [ -z "$PREV_TAG" ]; then
             echo "No previous tag found"
-            if [ -d "base" ]; then
-              echo "First release - base directory exists"
-              echo "base=true" >> $GITHUB_OUTPUT
-            else
-              echo "base=false" >> $GITHUB_OUTPUT
-            fi
+            echo "base=true" >> $GITHUB_OUTPUT
           else
             echo "Comparing base/ between $PREV_TAG and $CURRENT_TAG"
             if git diff $PREV_TAG $CURRENT_TAG -- base/ | grep -q .; then
@@ -104,7 +105,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Extract Clean Version
         run: echo "CLEAN_VERSION=${GITHUB_REF_NAME%-test}" >> $GITHUB_ENV
@@ -145,7 +146,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Extract Clean Version
         run: echo "CLEAN_VERSION=${GITHUB_REF_NAME%-test}" >> $GITHUB_ENV
@@ -185,7 +186,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Extract Clean Version
         run: echo "CLEAN_VERSION=${GITHUB_REF_NAME%-test}" >> $GITHUB_ENV
@@ -224,7 +225,7 @@ jobs:
       contents: read
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Enviar Chart do Helm
         run: |
@@ -252,7 +253,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Executar Upgrade no Docker Compose
         run: |
