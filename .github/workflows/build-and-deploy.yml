@@ -207,7 +207,9 @@ jobs:
           context: ./main
           target: dev
           push: true
-          tags: ${{ env.IMAGE_PREFIX }}${{ env.DEV_IMAGE }}:${{ github.ref_name }}
+          tags: |
+            ${{ env.IMAGE_PREFIX }}${{ env.DEV_IMAGE }}:${{ github.ref_name }}
+            ${{ env.IMAGE_PREFIX }}${{ env.MAIN_IMAGE }}:${{ github.ref_name }}
           build-args: |
             AVA_IMAGE_VERSION=${{ env.CLEAN_VERSION }}
             NVM_INSTALL_SHA256=${{ vars.NVM_INSTALL_SHA256 }}
