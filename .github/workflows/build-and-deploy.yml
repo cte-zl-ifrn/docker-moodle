@@ -124,9 +124,10 @@ jobs:
         with:
           context: ./base
           push: true
+          pull: true
           tags: ${{ env.IMAGE_PREFIX }}${{ env.BASE_IMAGE }}:${{ env.CLEAN_VERSION }}
-          cache-from: type=registry,ref=${{ env.IMAGE_PREFIX }}${{ env.BASE_IMAGE }}:latest
-          cache-to: type=inline
+          #cache-from: type=registry,ref=${{ env.IMAGE_PREFIX }}${{ env.BASE_IMAGE }}:latest
+          #cache-to: type=inline
           build-args: |
             NVM_INSTALL_SHA256=${{ vars.NVM_INSTALL_SHA256 }}
             PHPUNIT_11_PHAR_SHA256=${{ vars.PHPUNIT_11_PHAR_SHA256 }}
