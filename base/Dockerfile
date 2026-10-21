@@ -1,7 +1,7 @@
 ############################
 ## Imagem base
 ####################################################################################
-FROM php:8.3.33-apache-trixie
+FROM php:8.3.36-apache-trixie
 
 
 ENV DEBIAN_FRONTEND=noninteractive
