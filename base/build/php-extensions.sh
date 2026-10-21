@@ -5,7 +5,7 @@ set -e
 echo "Installing apt dependencies"
 
 # Build packages will be added during the build, but will be removed at the end.
-BUILD_PACKAGES="gettext libcurl4-openssl-dev libfreetype6-dev libicu-dev libjpeg62-turbo-dev libpng-dev libpq-dev libxml2-dev libxslt-dev uuid-dev libldap2-dev"
+BUILD_PACKAGES="autoconf g++ make pkg-config gettext libcurl4-openssl-dev libfreetype6-dev libicu-dev libjpeg62-turbo-dev libpng-dev libpq-dev libxml2-dev libxslt-dev uuid-dev libldap2-dev"
 
 # Packages for Postgres.
 PACKAGES_POSTGRES="libpq5"
@@ -48,7 +48,14 @@ docker-php-ext-configure ldap
 docker-php-ext-install -j$(nproc) ldap
 
 # APCu, igbinary, Redis, timezonedb, uuid, excimer, PCov, xdebug
-pecl install apcu igbinary pcov timezonedb uuid excimer xdebug
+pecl install apcu
+pecl install igbinary
+pecl install pcov
+pecl install timezonedb
+pecl install uuid
+pecl install excimer
+pecl install xdebug
+
 docker-php-ext-enable apcu igbinary pcov timezonedb uuid excimer xdebug
 
 echo 'apc.enable_cli = On' >> /usr/local/etc/php/conf.d/10-docker-php-ext-apcu.ini
