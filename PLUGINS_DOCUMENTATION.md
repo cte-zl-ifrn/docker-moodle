@@ -99,6 +99,7 @@ Esta documentação lista todos os plugins que serão instalados no ambiente Moo
 | `block_course_rating` | 202507031004 | Avaliação de cursos |
 | `block_custom_css` | 2025070302 | CSS customizado por bloco |
 | `block_dedication` | moodle44_2024072200 | Rastreamento de dedicação do aluno |
+| `block_feedback_tracker` | 2024100718 | Acompanhamento de feedback de atividades (v4.5-r4) |
 | `block_enrolmenttimer` | moodle37_2019091800 | Contador para inscrição |
 | `block_game` | moodle51_2025102202 | Bloco de gamificação |
 | `block_grade_me` | moodle45_2024100700 | Mostra minhas avaliações |
