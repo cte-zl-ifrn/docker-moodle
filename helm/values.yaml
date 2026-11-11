@@ -4,8 +4,8 @@ global:
 replicaCount: 1
 
 image:
-  repository: ctezlifrn/avamoodlebase
-  tag: "4.5.11.059"
+  repository: ctezlifrn/avamoodledev
+  tag: "5.3.0.003-test"
   pullPolicy: Always
 
 securityContext:
@@ -23,14 +23,14 @@ service:
 postgres:
   enabled: true
   host: "postgres.storage.svc.cluster.local"
-  name: "moodle"
-  user: "postgres"
+  name: "moodle_proximo"
+  user: "moodle_user"
   port: 5432
   # Configuração do Vault específica para Postgres
   vault:
-    path: "dbs/postgres"            # Caminho no Vault
-    key: "password"                 # Chave dentro do segredo
-    secretName: "postgres-db-secrets" # Nome do Secret K8s a ser criado
+    path: "ava/moodle-proximo"      # Caminho no Vault
+    key: "postgres-password"        # Chave dentro do segredo
+    secretName: "postgres-db-secrets-proximo" # Nome do Secret K8s a ser criado
     secretKey: "password"           # Chave dentro do Secret K8s (para env var)
 
 # 🔴 Configuração Unificada do Redis (Valkey)
@@ -38,19 +38,19 @@ redis:
   enabled: true
   host: "valkey.storage.svc.cluster.local"
   port: 6379
-  database: "4"
+  database: "5"
   prefix: "sess_"
   # Configuração do Vault específica para Redis
   vault:
-    path: "dbs/valkey"
-    key: "password"
-    secretName: "valkey-auth-secret"
+    path: "ava/moodle-proximo"      # Caminho no Vault
+    key: "redis-password"           # Chave dentro do segredo
+    secretName: "valkey-auth-secret-proximo" # Nome do Secret K8s a ser criado
     secretKey: "redis-password"
 
 persistence:
   enabled: true
   accessMode: ReadWriteOnce
-  existingClaim: "lh-moodle"
+  existingClaim: "lh-moodle-proximo"
   size: 25Gi
   mountPath: /var/moodledata
 
@@ -63,14 +63,14 @@ ingress:
     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
     nginx.ingress.kubernetes.io/proxy-body-size: "100m"
   hosts:
-    - host: moodle.ead.ifrn.edu.br
+    - host: moodle-proximo.ead.ifrn.edu.br
       paths:
         - path: /
           pathType: Prefix
   tls:
-    - secretName: moodle-tls
+    - secretName: moodle-proximo-tls
       hosts:
-        - moodle.ead.ifrn.edu.br
+        - moodle-proximo.ead.ifrn.edu.br
 
 autoscaling:
   enabled: false

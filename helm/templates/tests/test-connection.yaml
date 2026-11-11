@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "{{ include "moodle.fullname" . }}-test-connection"
+  name: "{{ include "moodle-proximo.fullname" . }}-test-connection"
   labels:
-    {{- include "moodle.labels" . | nindent 4 }}
+    {{- include "moodle-proximo.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook": test
 spec:
@@ -11,5 +11,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "moodle.fullname" . }}:{{ .Values.service.port }}']
+      args: ['{{ include "moodle-proximo.fullname" . }}:{{ .Values.service.port }}']
   restartPolicy: Never

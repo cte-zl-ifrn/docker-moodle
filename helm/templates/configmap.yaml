@@ -1,15 +1,15 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: moodle-env-config
+  name: {{ include "moodle-proximo.fullname" . }}-env-config
   labels:
-    app: moodle-web
+    app: {{ include "moodle-proximo.fullname" . }}-web
     release: {{ .Release.Name }}
 data:
   CFG_ENV: "production"
   CFG_DEBUG: "false"
-  CFG_WWWROOT: "https://moodle.ead.ifrn.edu.br"
-  CFG_WWWROOT_DOCKER: "https://moodle.ead.ifrn.edu.br"
+  CFG_WWWROOT: "https://moodle-proximo.ead.ifrn.edu.br"
+  CFG_WWWROOT_DOCKER: "https://moodle-proximo.ead.ifrn.edu.br"
   CFG_DATAROOT: "/var/moodledata"
   CFG_REVERSEPROXY: "false"
   CFG_SSLPROXY: "true"

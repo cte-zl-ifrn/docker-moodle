@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "moodle.fullname" . }}
+  name: {{ include "moodle-proximo.fullname" . }}
   labels:
-    {{- include "moodle.labels" . | nindent 4 }}
+    {{- include "moodle-proximo.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "moodle.selectorLabels" . | nindent 6 }}
+      {{- include "moodle-proximo.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "moodle.labels" . | nindent 8 }}
+        {{- include "moodle-proximo.labels" . | nindent 8 }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     spec:
-      serviceAccountName: {{ include "moodle.serviceAccountName" . }}
+      serviceAccountName: {{ include "moodle-proximo.serviceAccountName" . }}
       securityContext:
         runAsUser: {{ .Values.securityContext.runAsUser }}
 
@@ -51,7 +51,7 @@ spec:
           # Carrega variáveis gerais do ConfigMap
           envFrom:
             - configMapRef:
-                name: moodle-env-config
+                name: {{ include "moodle-proximo.fullname" . }}-env-config
 
           env:
             # --- POSTGRES ENV VARS ---
@@ -85,7 +85,7 @@ spec:
       volumes:
         - name: storage-volume
           persistentVolumeClaim:
-            claimName: {{ .Values.persistence.existingClaim | default (include "moodle.fullname" .) }}
+            claimName: {{ .Values.persistence.existingClaim | default (include "moodle-proximo.fullname" .) }}
 
       nodeSelector:
         {{- toYaml .Values.nodeSelector | nindent 8 }}
