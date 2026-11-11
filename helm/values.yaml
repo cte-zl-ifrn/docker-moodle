@@ -4,8 +4,8 @@ global:
 replicaCount: 1
 
 image:
-  repository: ctezlifrn/avamoodlebase
-  tag: "4.5.11.059"
+  repository: ctezlifrn/avamoodledev
+  tag: "4.5.15.005-test"
   pullPolicy: Always
 
 securityContext:
