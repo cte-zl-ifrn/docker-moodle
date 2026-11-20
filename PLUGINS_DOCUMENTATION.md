@@ -31,7 +31,7 @@ Esta documentação lista todos os plugins que serão instalados no ambiente Moo
 
 | Plugin | Versão | Descrição |
 |--------|--------|-----------|
-| `auth_suap` | 2026_02_13_053 | Autenticação integrada com SUAP |
+| `auth_suap` | 2026_10_19_086 | Autenticação integrada com SUAP |
 
 **Total**: 1 plugin
 
@@ -296,7 +296,7 @@ Esta documentação lista todos os plugins que serão instalados no ambiente Moo
 | `local_maintenance_livecheck` | moodle45_2024100702 | Verificação de manutenção ao vivo |
 | `local_openlms` | moodle45_2024103100 | Integração OpenLMS |
 | `local_pnp` | 2025_08_22_06 | PnP customizações |
-| `local_suap` | 20260206084 | Integração com SUAP |
+| `local_suap` | 2026_10_19_120 | Integração com SUAP |
 | `local_wordimport` | moodle45_2025042500 | Importação genérica do Word |
 
 **Total**: 18 plugins
@@ -330,6 +330,7 @@ Esta documentação lista todos os plugins que serão instalados no ambiente Moo
 | `tool_objectfs` | moodle45_2025082700 | Object Storage (v2) |
 | `tool_opcache` | moodle45_2024100700 | OPcache Manager (v1) |
 | `tool_opcache` | moodle45_2024100703 | OPcache Manager (v2) |
+| `tool_painelava` | 2026_11_04_022 | Integração com o Painel AVA (SUAP AVA Suite) |
 | `tool_redirects` | moodle45_2025080603 | Gerenciador de redirecionamentos |
 | `tool_ribbons` | moodle44_2021020402 | Fitas de badge |
 | `tool_sentry` | moodle51_2025102400 | Integração Sentry para erros |
