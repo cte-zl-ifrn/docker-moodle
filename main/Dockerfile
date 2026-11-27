@@ -19,8 +19,8 @@ ADD build/plugins  /tmp/build/plugins
 
 USER www-data
 WORKDIR /tmp/build/plugins
-RUN moodle-install-package.sh
-RUN sed -i s/ava_image_not_built/$AVA_IMAGE_VERSION/g /var/www/html/readenv.php
+RUN moodle-install-package.sh \
+    && sed -i s/ava_image_not_built/$AVA_IMAGE_VERSION/g /var/www/html/readenv.php
 
 
 ############################
@@ -72,7 +72,7 @@ FROM build AS dev
 
 USER www-data
 WORKDIR /var/www/html
-EXPOSE 80
+EXPOSE 8080
 ENTRYPOINT ["docker-php-entrypoint"]
 CMD ["apache2-foreground"]
 
@@ -86,6 +86,6 @@ COPY --from=build --chown=www-data:www-data /var/www/html /var/www/html
 
 USER www-data
 WORKDIR /var/www/html
-EXPOSE 80
+EXPOSE 8080
 ENTRYPOINT ["docker-php-entrypoint"]
 CMD ["apache2-foreground"]

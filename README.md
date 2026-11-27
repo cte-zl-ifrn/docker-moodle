@@ -11,6 +11,10 @@ O sistema de versionamento segue o padrão `M.m.r.s`, onde:
 3. `r` = Release version do Moodle
 4. `s` = Sequential version da CTE/DEAD/ZL/IFRN
 
+As imagens rodam como `www-data` e o Apache escuta na porta **8080** (não privilegiada), para funcionar em qualquer
+runtime (Docker, Podman, Kubernetes). Mapeie a porta do host para `8080`, por exemplo `-p 7080:8080`, e use
+`http://<servico>:8080` nas chamadas entre contêineres.
+
 ## CI/CD com GitHub Actions
 
 O projeto usa GitHub Actions para build e deploy automatizado. O workflow `.github/workflows/build-and-deploy.yml` é acionado automaticamente ao criar qualquer tag Git.
