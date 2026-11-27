@@ -24,12 +24,17 @@ RUN    /tmp/build/php-extensions.sh \
     && a2enconf filter-useragent \
     && echo "ServerName localhost" >> /etc/apache2/apache2.conf \
     && sed -i 's|\(CustomLog.*access\.log\s\+combined\)$|\1 env=!dontlog|' /etc/apache2/sites-available/000-default.conf \
-    && sed -i 's|\(CustomLog.*other_vhosts_access\.log\s\+vhost_combined\)$|\1 env=!dontlog|' /etc/apache2/conf-available/other-vhosts-access-log.conf
+    && sed -i 's|\(CustomLog.*other_vhosts_access\.log\s\+vhost_combined\)$|\1 env=!dontlog|' /etc/apache2/conf-available/other-vhosts-access-log.conf \
+    # Porta não privilegiada: o www-data abre a 8080 em qualquer runtime (Docker, Podman, Kubernetes).
+    && sed -i 's|^Listen 80$|Listen 8080|' /etc/apache2/ports.conf \
+    && sed -i 's|<VirtualHost \*:80>|<VirtualHost *:8080>|' /etc/apache2/sites-available/000-default.conf \
+    && grep -q '^Listen 8080$' /etc/apache2/ports.conf \
+    && grep -q '<VirtualHost \*:8080>' /etc/apache2/sites-available/000-default.conf
 
 ADD --chown=www-data:www-data runtime/php/ /var/www/html/
 
 USER www-data
 WORKDIR /var/www/html
-EXPOSE 80
+EXPOSE 8080
 ENTRYPOINT ["docker-php-entrypoint"]
 CMD ["apache2-foreground"]
